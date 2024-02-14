@@ -16,7 +16,7 @@ def calcular_macd(df):
 
 def coletar_dados():
     binance = ccxt.binance()
-    candles = binance.fetch_ohlcv('BTC/USDT', timeframe='1h', limit=100)
+    candles = binance.fetch_ohlcv('BEAMX/USDT', timeframe='1h', limit=100)
     df = pd.DataFrame(candles, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
     df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
     df = calcular_macd(df)

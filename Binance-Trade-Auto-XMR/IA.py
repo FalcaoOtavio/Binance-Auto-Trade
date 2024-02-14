@@ -20,12 +20,23 @@ def coletar_dados():
     df = pd.DataFrame(candles, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
     df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
     df = calcular_macd(df)
+    df_final = df[['timestamp', 'open', 'high', 'low', 'close', 'volume', 'MACD', 'Signal']]
+    csv_file = './files/binance_data_with_macd.csv'
+    df_final.to_csv(csv_file, index=False)
     return df
 
 def preparar_dados(df):
     df = df.dropna(subset=['MACD', 'Signal'])
     X = df[['MACD', 'Signal']].values
     return X
+
+def define_action(row):
+    if row['MACD'] > row['Signal']:  # Indica potencial sobrecompra
+        return 2  # Ação: vender (short)
+    elif row['MACD'] < row['Signal']:  # Indica potencial sobrevenda
+        return 1  # Ação: comprar (long)
+    else:
+        return 0  # Ação: esperar
 
 def obter_feedback(model, X):
     latest_data = X[-1].reshape(1, -1)
@@ -60,14 +71,24 @@ def main():
     model = load_model('./files/ia.h5')
     feedback, predicted_class = obter_feedback(model, X)
 
+    # Aqui, você usa a última entrada de dados para aplicar a função define_action diretamente
+    # Isto é mais uma validação da ação sugerida pelo modelo com a lógica do MACD
+    row = df_novos_dados.iloc[-1]  # Pega a última linha do DataFrame
+    correct_action = define_action(row)  # Define a ação correta baseada na lógica do MACD
+
+    # Comparar a ação correta com a previsão do modelo e o feedback do usuário
     if feedback == 1:
         correct_label = predicted_class
     else:
-        correct_label = int(input("Qual era a ação correta? 0 para Esperar, 1 para Comprar, 2 para Vender: "))
-    
+        # Se o feedback for que o modelo errou, usa a ação correta definida pela lógica do MACD
+        correct_label = correct_action
+        print(f"A ação correta baseada na lógica do MACD seria: {['esperar', 'comprar (long)', 'vender (short)'][correct_label]}")
+
     y = np.array([correct_label])
     y = to_categorical(y, num_classes=3)
     X = X[-1].reshape(1, -1)  # Usando apenas o último ponto de dados para simplificar
+    
+    # Re-treinar o modelo com a entrada mais recente e a etiqueta corrigida baseada no feedback e na lógica do MACD
     model_retreinado = re_treinar_modelo(X, y)
     model_retreinado.save('./files/ia.h5')
 
