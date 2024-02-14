@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 
 # Carrega os dados
-df = pd.read_csv('./files/binance_data_with_macd.csv')
+df = pd.read_csv('./Binance-Trade-Auto-BTC/files/binance_data_with_macd.csv')
 
 # Define a ação baseada nas condições do MACD e Signal
 def define_action(row):
@@ -30,9 +30,9 @@ df_y_train = pd.DataFrame(y_train, columns=['action'])
 df_y_test = pd.DataFrame(y_test, columns=['action'])
 
 # Salva os DataFrames em arquivos CSV
-df_X_train.to_csv('./files/X_train.csv', index=False)
-df_X_test.to_csv('./files/X_test.csv', index=False)
-df_y_train.to_csv('./files/y_train.csv', index=False)
-df_y_test.to_csv('./files/y_test.csv', index=False)
+df_X_train.to_csv('./Binance-Trade-Auto-BTC/X_train.csv', index=False)
+df_X_test.to_csv('./Binance-Trade-Auto-BTC/X_test.csv', index=False)
+df_y_train.to_csv('./Binance-Trade-Auto-BTC/y_train.csv', index=False)
+df_y_test.to_csv('./Binance-Trade-Auto-BTC/y_test.csv', index=False)
 
 print("Dados Carregados e Preparados com SUCESSO!!")

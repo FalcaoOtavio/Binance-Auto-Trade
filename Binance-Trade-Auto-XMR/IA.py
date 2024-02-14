@@ -45,7 +45,6 @@ def obter_feedback(model, X):
     decisions = ['esperar', 'comprar (long)', 'vender (short)']
     print(f"Decisão recomendada: {decisions[predicted_class]}")
     feedback = int(input("O modelo acertou? 1 para Sim, 2 para Não: "))
-    feedback = 1 
     return feedback, predicted_class
 
 def re_treinar_modelo(X, y):

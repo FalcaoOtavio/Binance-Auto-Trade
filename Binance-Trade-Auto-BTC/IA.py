@@ -44,9 +44,20 @@ def obter_feedback(model, X):
     predicted_class = np.argmax(prediction, axis=1)[0]
     decisions = ['esperar', 'comprar (long)', 'vender (short)']
     print(f"Decisão recomendada: {decisions[predicted_class]}")
+    
     feedback = int(input("O modelo acertou? 1 para Sim, 2 para Não: "))
-    feedback = 1 
-    return feedback, predicted_class
+    
+    if feedback == 1:
+        # O modelo acertou, então retornamos a classe prevista pelo modelo.
+        return predicted_class
+    else:
+        # O modelo errou, então pedimos ao usuário para especificar a ação correta.
+        print("Qual é a ação correta?")
+        for i, action in enumerate(decisions):
+            print(f"{i}: {action}")
+        correct_action = int(input("Escolha a ação correta (0: esperar, 1: comprar (long), 2: vender (short)): "))
+        # Retornamos a ação correta especificada pelo usuário.
+        return correct_action
 
 def re_treinar_modelo(X, y):
     model = Sequential([
@@ -69,29 +80,18 @@ def re_treinar_modelo(X, y):
 def main():
     df_novos_dados = coletar_dados()
     X = preparar_dados(df_novos_dados)
-    model = load_model('./Binance-Trade-Auto-BTC/files/ia.h5')
-    feedback, predicted_class = obter_feedback(model, X)
-
-    # Aqui, você usa a última entrada de dados para aplicar a função define_action diretamente
-    # Isto é mais uma validação da ação sugerida pelo modelo com a lógica do MACD
-    row = df_novos_dados.iloc[-1]  # Pega a última linha do DataFrame
-    correct_action = define_action(row)  # Define a ação correta baseada na lógica do MACD
-
-    # Comparar a ação correta com a previsão do modelo e o feedback do usuário
-    if feedback == 1:
-        correct_label = predicted_class
-    else:
-        # Se o feedback for que o modelo errou, usa a ação correta definida pela lógica do MACD
-        correct_label = correct_action
-        print(f"A ação correta baseada na lógica do MACD seria: {['esperar', 'comprar (long)', 'vender (short)'][correct_label]}")
+    model = load_model('./Binance-Trade-Auto-BTC-15Min/files/ia.h5')
+    
+    # A função obter_feedback foi ajustada para retornar diretamente a ação correta
+    correct_label = obter_feedback(model, X)
 
     y = np.array([correct_label])
     y = to_categorical(y, num_classes=3)
     X = X[-1].reshape(1, -1)  # Usando apenas o último ponto de dados para simplificar
     
-    # Re-treinar o modelo com a entrada mais recente e a etiqueta corrigida baseada no feedback e na lógica do MACD
+    # Re-treinar o modelo com a entrada mais recente e a etiqueta corrigida baseada na ação correta
     model_retreinado = re_treinar_modelo(X, y)
-    model_retreinado.save('./Binance-Trade-Auto-BTC/files/ia.h5')
+    model_retreinado.save('./Binance-Trade-Auto-BTC-15Min/files/ia.h5')
 
 if __name__ == '__main__':
     main()

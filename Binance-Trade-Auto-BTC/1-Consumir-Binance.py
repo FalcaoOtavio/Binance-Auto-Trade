@@ -26,7 +26,7 @@ df['Signal'] = df['MACD'].ewm(span=9, adjust=False).mean()
 df_final = df[['timestamp', 'open', 'high', 'low', 'close', 'volume', 'MACD', 'Signal']]
 
 # Salva os dados em um arquivo CSV
-csv_file = './files/binance_data_with_macd.csv'
+csv_file = './Binance-Trade-Auto-BTC/files/binance_data_with_macd.csv'
 df_final.to_csv(csv_file, index=False)
 
 print(f'Dados salvos em {csv_file}.')
