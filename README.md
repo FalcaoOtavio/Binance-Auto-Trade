@@ -13,9 +13,9 @@ Programa Python que utiliza uma biblioteca de inteligência artificial desenvolv
 How to use:
     In the case of the MANUAL program: The files were listed, from 1 to 4, and they must be executed in sequence, starting with file 1. I would like to note that program 3 is relatively time-consuming, depending on your hardware.
 
-    ---> In the case of the AUTO program: Just run 'setup.py' and you will see the magic happen!
+---> In the case of the AUTO program: Just run 'setup.py' and you will see the magic happen!
 
 Como usar:
     No caso do programa MANUAL: Os arquivos foram listados, de 1 a 4, e devem ser executados em sequência, começando pelo arquivo 1. Gostaria de ressaltar que o programa 3 é relativamente demorado, dependendo do seu hardware.
 
-    ---> No caso do programa AUTO: Basta executar 'setup.py' e você verá a mágica acontecer!
+---> No caso do programa AUTO: Basta executar 'setup.py' e você verá a mágica acontecer!
