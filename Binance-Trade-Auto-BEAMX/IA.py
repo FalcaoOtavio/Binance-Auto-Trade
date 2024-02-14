@@ -21,7 +21,7 @@ def coletar_dados():
     df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
     df = calcular_macd(df)
     df_final = df[['timestamp', 'open', 'high', 'low', 'close', 'volume', 'MACD', 'Signal']]
-    csv_file = './files/binance_data_with_macd.csv'
+    csv_file = './Binance-Trade-Auto-BEAMX/files/ia.h5binance_data_with_macd.csv'
     df_final.to_csv(csv_file, index=False)
     return df
 
@@ -45,6 +45,7 @@ def obter_feedback(model, X):
     decisions = ['esperar', 'comprar (long)', 'vender (short)']
     print(f"Decisão recomendada: {decisions[predicted_class]}")
     feedback = int(input("O modelo acertou? 1 para Sim, 2 para Não: "))
+    feedback = 1 
     return feedback, predicted_class
 
 def re_treinar_modelo(X, y):
@@ -68,7 +69,7 @@ def re_treinar_modelo(X, y):
 def main():
     df_novos_dados = coletar_dados()
     X = preparar_dados(df_novos_dados)
-    model = load_model('./files/ia.h5')
+    model = load_model('./Binance-Trade-Auto-BEAMX/files/ia.h5ia.h5')
     feedback, predicted_class = obter_feedback(model, X)
 
     # Aqui, você usa a última entrada de dados para aplicar a função define_action diretamente
@@ -90,7 +91,7 @@ def main():
     
     # Re-treinar o modelo com a entrada mais recente e a etiqueta corrigida baseada no feedback e na lógica do MACD
     model_retreinado = re_treinar_modelo(X, y)
-    model_retreinado.save('./files/ia.h5')
+    model_retreinado.save('./Binance-Trade-Auto-BEAMX/files/ia.h5ia.h5')
 
 if __name__ == '__main__':
     main()
